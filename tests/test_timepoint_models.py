@@ -106,6 +106,15 @@ def test_validate_data_on_fit(train_data):
         model.fit(train_data.rename(columns={"n_cases": "wrong_column_name"}))
 
 
+def test_glrnb_parameters(train_data, test_data):
+    # earlier values like theta amd mu0 were hard-coded and could not be passed in so very we get no exception
+    # This execution is similar to the R surveillance documentation
+    model = GLRNegativeBinomial(upperbound_statistic="cases", theta=1.2)
+    # make sure we can fit and predict
+    model.fit(train_data)
+    _ = model.predict(test_data)
+
+
 @pytest.mark.parametrize("Algo", algos_to_test)
 def test_prediction_witout_labels(train_data, test_data, shared_datadir, Algo):
     """Test only works with same data as `test_prediction`, because sample data contains no outbreaks in the training set."""
